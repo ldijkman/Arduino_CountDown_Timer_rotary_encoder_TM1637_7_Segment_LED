@@ -47,7 +47,7 @@ TM1637Display display(CLK, DIO);
 
 
 #include <Wire.h>
-#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal_I2C.h>  // do not know dfrobot.com i2c lib should change this to a github link
 //#include <LCD.h>
 
 //version 29-2-2020
@@ -241,6 +241,7 @@ void loop() {
       
     }
        seconds = seconds - 1;
+    // if (seconds<0) seconds=0;
        
       if (minutes == 0 && hours >= 1) {
         minutes = 60;
