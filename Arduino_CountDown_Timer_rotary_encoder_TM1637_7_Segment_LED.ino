@@ -312,7 +312,7 @@ void loop() {
 
 
   //    seconds = seconds - 1;
-
+// if (seconds<0) seconds=0;
 
       //Serial.print('hours '); // for testing
       //Serial.println(hours);
