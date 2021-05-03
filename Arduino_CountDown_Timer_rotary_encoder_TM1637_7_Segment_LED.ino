@@ -1,3 +1,20 @@
+/*
+
+Aarya Gupta
+1 year ago (edited)
+ @Luberth Dijkman  second is going in negative
+
+I have corrected it,thankq so much for the code
+  
+haha 
+if i remember right when start is for example 1:00 2:00
+
+think i add line +/-260       if (seconds<0) seconds=0;
+
+
+maybe try this     codeis not perfect maybe u can use it
+*/
+
 
 #include <Arduino.h>
 #include <TM1637Display.h> //https://github.com/avishorp/TM1637   download ZIP and install library from ZIP in arduino
