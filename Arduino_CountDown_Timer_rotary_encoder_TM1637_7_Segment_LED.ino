@@ -13,6 +13,10 @@ think i add line +/-260       if (seconds<0) seconds=0;
 
 
 maybe try this     codeis not perfect maybe u can use it
+
+
+https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED/blob/main/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED.ino
+https://www.youtube.com/watch?v=a7cO0Zcwmvw
 */
 
 
@@ -420,3 +424,6 @@ void doEncoderB() {
     rotating = false;
   }
 }
+
+// https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED/blob/main/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED.ino
+// https://www.youtube.com/watch?v=a7cO0Zcwmvw
