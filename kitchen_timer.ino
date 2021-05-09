@@ -1,4 +1,4 @@
-// kitchen timer
+// kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
 // only TM1637 7segment  rotary encoder and buzzer (NOT with 2x16 LCD)
 // version 8 - may - 2021
 // https://www.youtube.com/watch?v=B5O9bT54BzI
@@ -89,21 +89,21 @@ void loop() {
       t = t - 1;
       //lcd.setCursor(0, 0); lcd.print(t); lcd.print("          ");
       if (t == 60) {
-        tone(BuzzerPin, 200, 50);
+        tone(BuzzerPin, 200, 50); // beep
       }
       if (t == 40) {
-        tone(BuzzerPin, 200, 50);
+        tone(BuzzerPin, 200, 50); // beep
       }
       if (t == 20) {
-        tone(BuzzerPin, 200, 50);
+        tone(BuzzerPin, 200, 50); // beep
       }
       if (t <= 1) {
-        t = 1; timeState = true;
+        t = 1;
+        timeState = true;                       // start countdown
         sethours = hours;
         setminutes = minutes;
         setseconds = seconds;
-        // lcd.setCursor(0, 0); lcd.print("Get Set Go      ");
-        tone(BuzzerPin, 2000, 100);
+        tone(BuzzerPin, 2000, 100); // piep
       }
     }
   }
@@ -196,14 +196,11 @@ void loop() {
 
     while (timeState == true) {
 
-      //delay(992);           //maintime delay
-      int period = 1000;
+      int period = 965;        // 965 maintime delay adjust if your timer goes to fast or slow
       unsigned long time_now = 0;
       time_now = millis();
-      while (millis() < time_now + period) { //wait approx. [period] ms}
-
-
-
+      while (millis() < time_now + period) {
+        //wait approx. [period] ms}
       }
       seconds = seconds - 1;
 
@@ -352,16 +349,13 @@ void doEncoderA() {
   // debounce
   if ( rotating ) delay (1); // wait a little until the bouncing is done
 
-
   // Test transition, did things really change?
   if ( digitalRead(encoderPinA) != A_set ) { // debounce once more
     A_set = !A_set;
 
-
     // adjust counter + if A leads B
     if ( A_set && !B_set )
       encoderPos = 1;
-
 
     rotating = false; // no more debouncing until loop() hits again
   }
@@ -374,9 +368,7 @@ void doEncoderB() {
   if ( digitalRead(encoderPinB) != B_set ) {
     B_set = !B_set;
     // adjust counter – 1 if B leads A
-    if ( B_set && !A_set )
-      encoderPos = -1;
-
+    if ( B_set && !A_set ) encoderPos = -1;
 
     rotating = false;
   }
