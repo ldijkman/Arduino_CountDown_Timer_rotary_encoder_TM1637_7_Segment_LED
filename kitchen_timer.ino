@@ -196,11 +196,15 @@ void loop() {
 
     while (timeState == true) {
 
-      int period = 965;        // 965 maintime delay adjust if your timer goes to fast or slow
+      int period = 968;        // 965 maintime delay adjust if your timer goes to fast or slow
       unsigned long time_now = 0;
       time_now = millis();
       while (millis() < time_now + period) {
         //wait approx. [period] ms}
+        if (digitalRead(encoderButton) == LOW) {
+          timeState = false;
+           tone(BuzzerPin, 2000, 100); // piep
+        }
       }
       seconds = seconds - 1;
 
@@ -221,7 +225,7 @@ void loop() {
           //  lcd.print("Alarm!");
 
 
-          display.setSegments(SEG_DONE);
+          display.setSegments(SEG_DONE);  // display text => done
 
           tone(BuzzerPin, 600, 250);
           delay(250);
