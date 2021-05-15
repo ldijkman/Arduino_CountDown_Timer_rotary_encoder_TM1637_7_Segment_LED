@@ -1,8 +1,5 @@
 // kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
 // kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
-// kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
-// only TM1637 7segment  rotary encoder and buzzer (NOT with 2x16 LCD)
-// kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
 // only TM1637 7segment  rotary encoder and buzzer (NOT with 2x16 LCD)
 // version 15 - may - 2021
 // https://www.youtube.com/watch?v=B5O9bT54BzI
@@ -15,6 +12,9 @@
 //   encoderPinB 3        // encoder  DT  left
 //   encoderButton 5      // encoder  SW  switch
 // buzzer BuzzerPin 11 
+
+//  A Penny for Sharing My Thoughts?
+//  http://www.paypal.me/LDijkman
 
 #include <Arduino.h>
 #include <TM1637Display.h> // https://github.com/avishorp/TM1637
@@ -118,27 +118,24 @@ void loop() {
 
   if (HMS == 1) {
     uint8_t Blank[] = {0x0};
-    int Position = 3;
-    if  ((millis() / 250) % 2) {
-      display.setSegments(Blank, 1, 2);
-      display.setSegments(Blank, 1, 3);
+    if  ((millis() / 250) % 2) {        // blink seconds = sort of blink without delay
+      display.setSegments(Blank, 1, 2); // blank position 2
+      display.setSegments(Blank, 1, 3); // blank position 3
     } else {
-      if (minutes > 0)display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04
-      if (minutes == 0)display.showNumberDec(seconds, false, 2, 2); // Expect: no leading 0
+      display.showNumberDecEx(minutes, (0b01000000),false, 2, 0);
+      display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04   
     }
   }
 
   if (HMS == 2) {
     uint8_t Blank[] = {0x0};
-    int Position = 3;
-    if  ((millis() / 250) % 2) {
-      display.setSegments(Blank, 1, 0);
-      display.setSegments(Blank, 1, 1);
+    if  ((millis() / 250) % 2) {        // blink minutes = sort of blink without delay    
+      display.setSegments(Blank, 1, 0); // blank position 0 
+      display.setSegments(Blank, 1, 1); // blank position 1
     } else {
-      if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000),false, 2, 0);
-    }
-          if (minutes > 0)display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04
-      if (minutes == 0)display.showNumberDec(seconds, false, 2, 2); // Expect: no leading 0
+      display.showNumberDecEx(minutes, (0b01000000),false, 2, 0); 
+      display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04
+    }     
   }
 
 
@@ -313,4 +310,8 @@ void doEncoderB() {
 
     rotating = false;
   }
+//  A Penny for Sharing My Thoughts?
+//  http://www.paypal.me/LDijkman
 }
+
+
