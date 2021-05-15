@@ -1,6 +1,7 @@
 // kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
+// kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
 // only TM1637 7segment  rotary encoder and buzzer (NOT with 2x16 LCD)
-// version 8 - may - 2021
+// version 15 - may - 2021
 // https://www.youtube.com/watch?v=B5O9bT54BzI
 // TM1637 7segment https://www.youtube.com/watch?v=a7cO0Zcwmvw
 // original with seperate start button https://www.youtube.com/watch?v=rzxisoU9D6c
@@ -54,6 +55,7 @@ unsigned int lastReportedPos = 1; // change management
 static boolean rotating = false;  // debounce management
 boolean A_set = false;
 boolean B_set = false;
+int cld;
 
 
 void setup() {
@@ -109,10 +111,49 @@ void loop() {
   }
 
   if (HMS == 2) {
-    Serial.println("set minutes     ");
+    // Serial.println("set minutes     ");
   }
   if (HMS == 1) {
-    Serial.println("set seconds     ");
+
+    /*
+      if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
+      //Serial.println("set seconds     ");
+      if (((millis() / 200) % 2) == 0) {
+      if (cld==1){display.clear();cld=0;}
+      if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
+      }
+      else {
+      cld=1;
+      display.showNumberDec(seconds, true, 2, 2);
+      if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
+      }
+      //Serial.println(((millis() / 1000) % 2));
+    */
+    //   int k;
+    // uint8_t data[] = { 0x00, 0x00, 0x00, 0x00 };
+    // data[0] = display.encodeDigit(0);
+    //data[1] = display.encodeDigit(1);
+    //data[2] = display.encodeDigit(-);
+    //data[3] = display.encodeDigit(-);
+    // display.setSegments(data);
+    // for(k = 3; k >= 0; k--) {
+    //display.setSegments(data, 1, k);
+    //delay(500);
+    //}
+    //display.setSegments( 0b01000000,1,0);
+    //static uint8_t data[] = {0, 0, 0, 0};
+    // const uint8_t segs[] = {0, SEG_A, SEG_B, SEG_C, SEG_D, SEG_E, SEG_F, SEG_G, SEG_DP};
+
+    // data[0] =  segs[8];
+    // data[1] =  segs[8];
+    //     data[2] =  segs[8];
+    //     data[3] =  segs[8];
+    //display.setSegments(data);  display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
+    //     display.showNumberDec(seconds,true, 0, 2);
+    //    delay(10);
+    //    display.showNumberDec(seconds, true, 2, 2);
+
+    // if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
   }
 
 
@@ -134,45 +175,22 @@ void loop() {
     }
     else if (HMS == 1) {
       seconds = seconds + encoderPos;
+      if (seconds == 60) {
+        seconds = 0;
+        minutes = minutes + 1;
+      }
+      if (seconds < 0) {
+        seconds = 59;
+        minutes = minutes - 1;
+      }
       seconds = constrain(seconds, 0, 60);
 
     }
 
 
-    // Serial.println(encoderPos); // for testing
-    // Serial.print('hours ');
-    // Serial.println(hours);
-    // Serial.print('minutes ');
-    // Serial.println(minutes);
-    // Serial.print('seconds ');
-    // Serial.println(seconds);
-    // Serial.println(' ');
 
 
 
-
-
-
-
-
-    // lcd.setCursor(4, 1);
-    if (hours <= 9)
-    {
-      //   lcd.print("0");
-    }
-    // lcd.print(hours);
-    //  lcd.print(":");
-    if (minutes <= 9)
-    {
-      //   lcd.print("0");
-    }
-    //  lcd.print(minutes);
-    //  lcd.print(":");
-    if (seconds <= 9)
-    {
-      //  lcd.print("0");
-    }
-    // lcd.print(seconds);
     encoderPos = 0;
     lastReportedPos = encoderPos;
 
@@ -203,7 +221,7 @@ void loop() {
         //wait approx. [period] ms}
         if (digitalRead(encoderButton) == LOW) {
           timeState = false;
-           tone(BuzzerPin, 2000, 100); // piep
+          tone(BuzzerPin, 2000, 100); // piep
         }
       }
       seconds = seconds - 1;
