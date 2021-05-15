@@ -2,21 +2,26 @@
 // kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
 // kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
 // only TM1637 7segment  rotary encoder and buzzer (NOT with 2x16 LCD)
+// kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
+// only TM1637 7segment  rotary encoder and buzzer (NOT with 2x16 LCD)
 // version 15 - may - 2021
 // https://www.youtube.com/watch?v=B5O9bT54BzI
 // TM1637 7segment https://www.youtube.com/watch?v=a7cO0Zcwmvw
 // original with seperate start button https://www.youtube.com/watch?v=rzxisoU9D6c
 
-// TM1637 4 digit 7segment
+// TM1637 4 digit 7segment CLK 8 DIO 9
 // rotary encoder
-// buzzer
+//   encoderPinA 2        // encoder  CLK right
+//   encoderPinB 3        // encoder  DT  left
+//   encoderButton 5      // encoder  SW  switch
+// buzzer BuzzerPin 11 
 
 #include <Arduino.h>
-#include <TM1637Display.h> //https://github.com/avishorp/TM1637
+#include <TM1637Display.h> // https://github.com/avishorp/TM1637
 #include <Wire.h>
 
-// Module connection pins (Digital Pins)
-#define CLK 8           // D8 to  TM1637 4 character 7 segment LED Display
+// led Module connection pins (Digital Pins)
+#define CLK 8            // D8 to  TM1637 4 character 7 segment LED Display
 #define DIO 9            // D9 to  TM1637 4 character 7 segment LED Display
 
 // The amount of time (in milliseconds) between tests
@@ -37,7 +42,6 @@ TM1637Display display(CLK, DIO);
 // possible without button
 // use encoder longpress to start
 #define BuzzerPin 11          // buzzer D11 
-#define BACKLIGHT_PIN 13
 
 
 int hours = 0;
@@ -85,7 +89,7 @@ void loop() {
     {
       HMS = 1;
     }
-    
+
     tone(BuzzerPin, 1000, 100);
     int t = 80;
     while (digitalRead(encoderButton) == LOW) {
@@ -112,7 +116,30 @@ void loop() {
     }
   }
 
+  if (HMS == 1) {
+    uint8_t Blank[] = {0x0};
+    int Position = 3;
+    if  ((millis() / 250) % 2) {
+      display.setSegments(Blank, 1, 2);
+      display.setSegments(Blank, 1, 3);
+    } else {
+      if (minutes > 0)display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04
+      if (minutes == 0)display.showNumberDec(seconds, false, 2, 2); // Expect: no leading 0
+    }
+  }
 
+  if (HMS == 2) {
+    uint8_t Blank[] = {0x0};
+    int Position = 3;
+    if  ((millis() / 250) % 2) {
+      display.setSegments(Blank, 1, 0);
+      display.setSegments(Blank, 1, 1);
+    } else {
+      if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000),false, 2, 0);
+    }
+          if (minutes > 0)display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04
+      if (minutes == 0)display.showNumberDec(seconds, false, 2, 2); // Expect: no leading 0
+  }
 
 
   rotating = true; // reset the debouncer
@@ -131,6 +158,7 @@ void loop() {
 
     }
     else if (HMS == 1) {
+
       seconds = seconds + encoderPos;
       if (seconds == 60) {
         seconds = 0;
@@ -165,10 +193,10 @@ void loop() {
 
 
   if (digitalRead(Start) == LOW || timeState == true) { //start count down timer
-    
+
     timeState = true;
     delay(100);
-    
+
 
     while (timeState == true) {
 
@@ -229,12 +257,12 @@ void loop() {
       }
 
 
-    Serial.println(seconds);
+      Serial.println(seconds);
 
       display.setBrightness(0x0f);
       if (minutes == 0)display.clear();
-      if (minutes > 0)display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04 leading 0 on seconds 
-      if (minutes == 0)display.showNumberDec(seconds, false, 2, 2); // Expect: no leading 0 on seconds 0 to 9 
+      if (minutes > 0)display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04 leading 0 on seconds
+      if (minutes == 0)display.showNumberDec(seconds, false, 2, 2); // Expect: no leading 0 on seconds 0 to 9
       if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
 
       tone(BuzzerPin, 50, 50); // second buz
