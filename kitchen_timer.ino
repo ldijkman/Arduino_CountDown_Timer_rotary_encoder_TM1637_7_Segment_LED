@@ -16,6 +16,7 @@
 //  A Penny for Sharing My Thoughts?
 //  http://www.paypal.me/LDijkman
 
+
 #include <Arduino.h>
 #include <TM1637Display.h> // https://github.com/avishorp/TM1637
 #include <Wire.h>
@@ -85,7 +86,7 @@ void loop() {
   if (digitalRead(encoderButton) == LOW)
   {
     HMS = HMS + 1;
-    if (HMS == 3)
+    if (HMS == 4)
     {
       HMS = 1;
     }
@@ -122,22 +123,26 @@ void loop() {
       display.setSegments(Blank, 1, 2); // blank position 2
       display.setSegments(Blank, 1, 3); // blank position 3
     } else {
-      display.showNumberDecEx(minutes, (0b01000000),false, 2, 0);
-      display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04   
+      display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
+      display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04
     }
   }
 
   if (HMS == 2) {
     uint8_t Blank[] = {0x0};
-    if  ((millis() / 250) % 2) {        // blink minutes = sort of blink without delay    
-      display.setSegments(Blank, 1, 0); // blank position 0 
+    if  ((millis() / 250) % 2) {        // blink minutes = sort of blink without delay
+      display.setSegments(Blank, 1, 0); // blank position 0
       display.setSegments(Blank, 1, 1); // blank position 1
     } else {
-      display.showNumberDecEx(minutes, (0b01000000),false, 2, 0); 
+      display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
       display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04
-    }     
+    }
   }
-
+  if (HMS == 3) {
+    //dummy to stop the blinking
+    display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
+    display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04
+  }
 
   rotating = true; // reset the debouncer
   encoderPos = constrain(encoderPos, -1, 1);
@@ -145,9 +150,7 @@ void loop() {
 
 
     if (HMS == 3) {
-      hours = hours + encoderPos;
-      hours = constrain(hours, 0, 48);
-
+      //dummy to stop the blinking
     }
     else if (HMS == 2) {
       minutes = minutes + encoderPos;
@@ -246,6 +249,7 @@ void loop() {
             hours = sethours;
             minutes = setminutes;
             seconds = setseconds;
+            HMS == 3;
             break;
           }
 
@@ -310,8 +314,11 @@ void doEncoderB() {
 
     rotating = false;
   }
-//  A Penny for Sharing My Thoughts?
-//  http://www.paypal.me/LDijkman
+  //  A Penny for Sharing My Thoughts?
+  //  http://www.paypal.me/LDijkman
 }
+
+
+
 
 
