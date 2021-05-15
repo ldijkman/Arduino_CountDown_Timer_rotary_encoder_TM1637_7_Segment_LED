@@ -1,5 +1,6 @@
 // kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
 // kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
+// kitchen timer https://github.com/ldijkman/Arduino_CountDown_Timer_rotary_encoder_TM1637_7_Segment_LED
 // only TM1637 7segment  rotary encoder and buzzer (NOT with 2x16 LCD)
 // version 15 - may - 2021
 // https://www.youtube.com/watch?v=B5O9bT54BzI
@@ -84,6 +85,7 @@ void loop() {
     {
       HMS = 1;
     }
+    
     tone(BuzzerPin, 1000, 100);
     int t = 80;
     while (digitalRead(encoderButton) == LOW) {
@@ -110,51 +112,6 @@ void loop() {
     }
   }
 
-  if (HMS == 2) {
-    // Serial.println("set minutes     ");
-  }
-  if (HMS == 1) {
-
-    /*
-      if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
-      //Serial.println("set seconds     ");
-      if (((millis() / 200) % 2) == 0) {
-      if (cld==1){display.clear();cld=0;}
-      if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
-      }
-      else {
-      cld=1;
-      display.showNumberDec(seconds, true, 2, 2);
-      if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
-      }
-      //Serial.println(((millis() / 1000) % 2));
-    */
-    //   int k;
-    // uint8_t data[] = { 0x00, 0x00, 0x00, 0x00 };
-    // data[0] = display.encodeDigit(0);
-    //data[1] = display.encodeDigit(1);
-    //data[2] = display.encodeDigit(-);
-    //data[3] = display.encodeDigit(-);
-    // display.setSegments(data);
-    // for(k = 3; k >= 0; k--) {
-    //display.setSegments(data, 1, k);
-    //delay(500);
-    //}
-    //display.setSegments( 0b01000000,1,0);
-    //static uint8_t data[] = {0, 0, 0, 0};
-    // const uint8_t segs[] = {0, SEG_A, SEG_B, SEG_C, SEG_D, SEG_E, SEG_F, SEG_G, SEG_DP};
-
-    // data[0] =  segs[8];
-    // data[1] =  segs[8];
-    //     data[2] =  segs[8];
-    //     data[3] =  segs[8];
-    //display.setSegments(data);  display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
-    //     display.showNumberDec(seconds,true, 0, 2);
-    //    delay(10);
-    //    display.showNumberDec(seconds, true, 2, 2);
-
-    // if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
-  }
 
 
 
@@ -208,9 +165,10 @@ void loop() {
 
 
   if (digitalRead(Start) == LOW || timeState == true) { //start count down timer
-    //lcd.setCursor(0, 0); lcd.print("Counting Down!  ");
+    
     timeState = true;
-    delay(500);
+    delay(100);
+    
 
     while (timeState == true) {
 
@@ -236,12 +194,6 @@ void loop() {
       }
       else if (minutes == 0 && hours == 0 && seconds == 0) { //count down alarm
         while (timeState == true) {
-          // lcd.clear();
-          //  lcd.setCursor(0, 0);
-          //  lcd.print("COUNT DOWN TIMER");
-          //  lcd.setCursor(5, 1);
-          //  lcd.print("Alarm!");
-
 
           display.setSegments(SEG_DONE);  // display text => done
 
@@ -252,29 +204,17 @@ void loop() {
           if (digitalRead(Start) == LOW) { // turn alarm off with switch
             timeState = false;
             seconds = 1;
-            //  lcd.clear();
-            //  lcd.setCursor(0, 0);
-            //  lcd.print("COUNT DOWN TIMER");
-            //  lcd.setCursor(4, 1);
-            //  lcd.print("00:00:00");
 
             hours = sethours;
             minutes = setminutes;
             seconds = setseconds;
-
-
             break;
           }
 
 
           if (digitalRead(encoderButton) == LOW) { // turn alarm off with rotary encoder switch
             timeState = false;
-            //seconds = 1;
-            ///  lcd.clear();
-            //  lcd.setCursor(0, 0);
-            // lcd.print("COUNT DOWN TIMER");
-            //  lcd.setCursor(4, 1);
-            //   lcd.print("Done!");
+
             while (digitalRead(encoderButton) == LOW) {
               delay(1000); //wait for release switch
             }
@@ -289,74 +229,20 @@ void loop() {
       }
 
 
-
-      //Serial.print('hours '); // for testing
-      //Serial.println(hours);
-      //Serial.print('minutes ');
-      //Serial.println(minutes);
-      //Serial.print('seconds ');
-      Serial.println(seconds);
-      //Serial.println(' ');
-
-
-      int k;
-      uint8_t data[] = { 0xff, 0xff, 0xff, 0xff };
-      uint8_t blank[] = { 0x00, 0x00, 0x00, 0x00 };
-
-
-
-      //display.clear();
-      //display.showNumberDecEx(14, (0b01000000), false,2,0);
-
-
-
-      //display.showNumberDec(14, true, 2, 0); // Expect: __14
-      //delay(TEST_DELAY);
+    Serial.println(seconds);
 
       display.setBrightness(0x0f);
       if (minutes == 0)display.clear();
-      if (minutes > 0)display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04
-      if (minutes == 0)display.showNumberDec(seconds, false, 2, 2); // Expect: no leading 0
+      if (minutes > 0)display.showNumberDec(seconds, true, 2, 2); // Expect:  1:04 leading 0 on seconds 
+      if (minutes == 0)display.showNumberDec(seconds, false, 2, 2); // Expect: no leading 0 on seconds 0 to 9 
       if (minutes > 0) display.showNumberDecEx(minutes, (0b01000000), false, 2, 0);
 
-      tone(BuzzerPin, 50, 50);
+      tone(BuzzerPin, 50, 50); // second buz
 
 
 
-
-
-
-
-
-
-
-      //lcd.setCursor(4, 1);
-      if (hours <= 9)
-      {
-        // lcd.print("0");
-      }
-      //lcd.print(hours);
-      //lcd.print(":");
-      if (minutes <= 9)
-      {
-        //lcd.print("0");
-      }
-      //lcd.print(minutes);
-      // lcd.print(":");
-      if (seconds <= 9)
-      {
-        //lcd.print("0");
-      }
-      // lcd.print(seconds);
-
-
-      if (digitalRead(Start) == LOW) {           // pauze countdown with start button
-        delay(1000);
-        timeState = false;
-        break;
-      }
       if (digitalRead(encoderButton) == LOW) {    // pauze countdown with encoder button
-        delay(1000);
+        delay(50);
         tone(BuzzerPin, 500, 100);
         timeState = false;
         break;
@@ -364,6 +250,11 @@ void loop() {
     }
   }
 }
+
+
+
+
+
 
 
 // Interrupt on A changing state
